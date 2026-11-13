@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3b6ef5">
+<title>TheBestLearning</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#14213d;--muted:#667394;--line:#e1e6f0;--a:#3b6ef5;--b:#7b4dff;--mark:#ffe27a;--ok:#16a34a;--bad:#d6336c;--grad:linear-gradient(135deg,var(--a),var(--b));--th:calc(56px + env(safe-area-inset-top,0px))}
+@media (prefers-color-scheme:dark){:root{--bg:#0e1424;--card:#171f36;--ink:#e9eefb;--muted:#9aa7c7;--line:#27314f;--a:#4f7bff;--b:#8a63ff;--mark:#6b5a14;--ok:#4ade80;color-scheme:dark}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Segoe UI",Roboto,system-ui,sans-serif;line-height:1.5;padding-top:var(--th)}
+body.land{overflow:hidden}
+[hidden]{display:none!important}
+button{font:inherit;border:0;cursor:pointer;color:inherit;background:none}
+input{font:inherit;width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
+:focus-visible{outline:2px solid var(--a);outline-offset:2px}
+.btn{display:block;width:100%;padding:13px 18px;border-radius:12px;background:var(--grad);color:#fff;font-weight:600;text-align:center;transition:transform .12s,opacity .12s}
+.btn:active{transform:scale(.98)}.btn:disabled{opacity:.6;cursor:default}
+.btn.alt{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.sm{padding:9px 14px;width:auto;display:inline-block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 4px 18px rgba(20,33,61,.06)}
+
+/* ---------- top bar ---------- */
+#top{position:fixed;top:0;left:0;right:0;height:var(--th);padding:env(safe-area-inset-top,0px) 16px 0;display:flex;align-items:center;justify-content:space-between;z-index:40;background:var(--card);border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.05rem}
+.logo .lg{width:34px;height:34px;border-radius:10px;background:var(--grad);color:#fff;display:grid;place-items:center;font-weight:800}
+body.land #top{background:transparent;border-color:transparent;color:#fff}
+#topr{display:flex;align-items:center;gap:10px}
+#pill{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;background:var(--bg);border:1px solid var(--line);font-size:.9rem}
+#pill.bump{animation:bump .45s}
+@keyframes bump{30%{transform:scale(1.25);background:var(--mark)}100%{transform:none}}
+#pill .plus{position:absolute;color:var(--ok);font-weight:700;opacity:0;pointer-events:none}
+#pill.bump .plus{animation:rise .7s}
+@keyframes rise{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-22px)}}
+#pill{position:relative}
+.lnk{padding:8px 14px;border-radius:10px;font-weight:600}
+body.land .lnk{color:#fff;border:1px solid rgba(255,255,255,.5)}
+
+/* ---------- landing ---------- */
+#landing{position:fixed;inset:0;z-index:10;background:#0b1226;overflow:hidden}
+#bgv,#demo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#demo{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:radial-gradient(circle at 30% 20%,#27408f,#0b1226 70%)}
+.fake{width:min(70vw,720px);aspect-ratio:16/9;border-radius:18px;background:linear-gradient(120deg,#3b6ef5,#7b4dff,#0ea5e9,#3b6ef5);background-size:300% 300%;animation:sh 10s linear infinite}
+@keyframes sh{0%{background-position:0 50%}100%{background-position:300% 50%}}
+#dl{font-size:clamp(1.1rem,3vw,1.8rem);color:#fff;min-height:2.4em;text-align:center}
+#dl span{padding:2px 6px;border-radius:8px}#dl span.on{background:var(--mark);color:#14213d}
+.shade{position:absolute;inset:0;backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);background:linear-gradient(180deg,rgba(8,12,28,.62),rgba(8,12,28,.78))}
+.hero{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;color:#fff}
+.hero h1{margin:0 0 28px;max-width:16ch;font-size:clamp(2.1rem,7vw,4.2rem);line-height:1.08;font-weight:800;letter-spacing:-.02em;text-wrap:balance}
+.cta{width:100%;max-width:340px;display:grid;gap:12px}
+.orl{display:flex;align-items:center;gap:12px;color:rgba(255,255,255,.75);font-size:.9rem;text-transform:uppercase;letter-spacing:.12em}
+.orl::before,.orl::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.35)}
+.hero .btn.alt{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.45)}
+
+/* ---------- auth modal ---------- */
+.modal{position:fixed;inset:0;z-index:70;background:rgba(10,15,30,.62);backdrop-filter:blur(4px);display:grid;place-items:center;padding:16px;overflow:auto}
+.modal>.card{width:100%;max-width:400px;position:relative;padding:24px}
+.cx{position:absolute;top:10px;right:12px;font-size:1.5rem;color:var(--muted);width:36px;height:36px}
+.modal h2{margin:0 0 4px;font-size:1.4rem}.sub{margin:0 0 14px;color:var(--muted);font-size:.95rem}
+.tabs{display:flex;background:var(--bg);border-radius:12px;padding:4px;margin-bottom:14px}
+.tabs button{flex:1;padding:9px;border-radius:9px;font-weight:600;color:var(--muted)}
+.tabs button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.f{display:grid;gap:10px;margin-bottom:10px}
+.pw{position:relative}.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);padding:6px 10px;color:var(--muted);font-size:.85rem}
+.pw input{padding-right:64px}
+#err{color:var(--bad);font-size:.9rem;min-height:1.3em;margin:0 0 8px}
+
+/* ---------- app shell ---------- */
+#app main{padding:16px 16px calc(88px + env(safe-area-inset-bottom,0px))}
+.view{display:none}.view.cur{display:block}
+.in{max-width:620px;margin:0 auto}
+#nav{position:fixed;left:0;right:0;bottom:0;height:calc(64px + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);display:flex;background:var(--card);border-top:1px solid var(--line);z-index:35}
+#nav button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:.75rem;color:var(--muted);position:relative}
+#nav button.on{color:var(--a);font-weight:600}
+#nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#nav .nb{position:absolute;top:6px;left:calc(50% + 8px);background:var(--a);color:#fff;border-radius:99px;font-size:.65rem;padding:0 6px;min-width:18px;text-align:center}
+
+/* ---------- videos ---------- */
+.up{display:flex;align-items:center;gap:12px;border:2px dashed var(--a);border-radius:16px;padding:14px;margin-bottom:10px;cursor:pointer;background:var(--card)}
+.up b{display:block}.up span{color:var(--muted);font-size:.85rem}
+.up .ic{width:44px;height:44px;border-radius:12px;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:1.4rem;flex:none}
+.link{display:flex;gap:8px;margin-bottom:10px}.link .btn{width:auto;padding:0 22px}
+#status{display:flex;align-items:center;gap:8px;font-size:.92rem;color:var(--muted);margin:0 0 8px;min-height:1.6em}
+#status.bad{color:var(--bad)}#status.good{color:var(--ok);font-weight:600}
+.up2{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;border:1px solid var(--line);border-radius:12px;margin-bottom:10px;cursor:pointer;color:var(--muted);font-size:.92rem;background:var(--card)}
+.mini{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:6px 14px;font-size:.88rem;margin:0 0 10px}
+#paste{padding:12px;margin-bottom:10px;display:grid;gap:8px}
+#paste p{margin:0;color:var(--muted);font-size:.88rem}
+#ptxt{font:inherit;width:100%;min-height:110px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);resize:vertical}
+#paste summary{color:var(--muted);font-size:.8rem}
+#tip input.ld{background-image:linear-gradient(90deg,var(--bg),var(--line),var(--bg));background-size:200% 100%;animation:shim 1s linear infinite}
+@keyframes shim{from{background-position:200% 0}to{background-position:-200% 0}}
+.tick{width:22px;height:22px;border-radius:50%;background:var(--ok);color:#fff;display:inline-grid;place-items:center;font-size:.8rem;animation:pop .35s}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.25)}100%{transform:scale(1)}}
+#prog{height:5px;border-radius:9px;background:var(--line);margin-bottom:10px;overflow:hidden}
+#prog i{display:block;height:100%;width:0;background:var(--grad);transition:width .3s}
+#stage{margin-top:6px;display:grid;gap:12px}
+#vwrap{position:relative;background:#000;border-radius:14px;overflow:hidden;aspect-ratio:16/9}
+#player,#ytbox,#ytbox iframe{width:100%;height:100%;display:block;border:0}
+#fsb{position:absolute;top:8px;right:8px;width:38px;height:38px;border-radius:10px;background:rgba(0,0,0,.55);color:#fff;font-size:1.2rem;z-index:2}
+#cap{min-height:96px;padding:12px 14px}
+#cap .hint,#transcript .hint{color:var(--muted);margin:0}
+.en{display:block;line-height:1.9;font-size:1.2rem}
+.uz{display:block;color:var(--muted);font-size:.92rem;line-height:1.4;padding:0 4px}
+.uz:empty{display:none}
+.w{display:inline-block;padding:0 4px;margin:0 1px;border-radius:6px;cursor:pointer;border:2px solid transparent;transition:background .12s}
+.w:hover{background:rgba(59,110,245,.14)}
+.w.saved{text-decoration:underline dotted var(--a);text-underline-offset:4px}
+.w.now{background:var(--mark);border-color:var(--a);color:var(--ink)}
+#transcript{position:relative;height:36vh;overflow-y:auto;padding:12px 14px;scroll-behavior:smooth}
+.seg{margin:0 0 12px;opacity:.5;transition:opacity .2s}
+.seg.act{opacity:1}
+#transcript .en{font-size:1.02rem}
+#stage.fs{position:fixed;inset:0;z-index:60;margin:0;background:var(--bg);display:flex;flex-direction:column;gap:0;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+#stage.fs .left{display:contents}
+#stage.fs #vwrap{flex:0 0 42%;aspect-ratio:auto;border-radius:0}
+#stage.fs #cap{flex:0 0 auto;border-radius:0;border-width:1px 0}
+#stage.fs #transcript{flex:1;height:auto;border-radius:0;border-width:0}
+
+/* ---------- tooltip ---------- */
+#tip{position:fixed;z-index:80;width:260px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:0 12px 34px rgba(0,0,0,.28);opacity:0;transform:translateY(6px) scale(.96);pointer-events:none;transition:opacity .16s,transform .16s}
+#tip.open{opacity:1;transform:none;pointer-events:auto}
+#tip .tw{font-weight:700;font-size:1.1rem;margin-bottom:6px}
+#tip input{padding:9px 10px;font-size:.95rem}
+#tip .ta{display:flex;gap:8px;margin-top:8px}
+#tip .ta .btn{padding:9px}
+#tip .say{width:42px;flex:none;border-radius:12px;border:1px solid var(--line);font-size:1.1rem}
+#tip .te{color:var(--bad);font-size:.8rem;margin:6px 0 0}
+#tip .rm{width:42px;flex:none;border-radius:12px;border:1px solid var(--line);color:var(--bad)}
+#tip .arrow{position:absolute;left:var(--ax,50%);bottom:-7px;width:12px;height:12px;background:var(--card);border-right:1px solid var(--line);border-bottom:1px solid var(--line);transform:translateX(-50%) rotate(45deg)}
+#tip.below .arrow{bottom:auto;top:-7px;transform:translateX(-50%) rotate(225deg)}
+.btn.done{background:var(--ok)}
+
+/* ---------- my words ---------- */
+.wide{max-width:1150px;margin:0 auto}
+.empty{text-align:center;padding:48px 16px}
+.empty .big{font-size:4rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.empty h2{margin:6px 0 8px}.empty p{color:var(--muted);margin:0 auto 20px;max-width:34ch}
+.empty .btn{display:inline-block;width:auto}
+.whead{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.whead h2{margin:0;font-size:1.3rem}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.chip{padding:7px 14px;border-radius:99px;border:1px solid var(--line);background:var(--card);font-size:.88rem}
+.chip.on{background:var(--grad);color:#fff;border-color:transparent}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.fc{position:relative;background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 4px 18px rgba(20,33,61,.06);transition:transform .15s}
+.fc:hover{transform:translateY(-3px)}
+.clip{position:relative;aspect-ratio:16/9;background:#0b1226;overflow:hidden;display:grid;place-items:center;color:#fff}
+.clip img,.clip iframe{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0}
+.clip.yt{cursor:pointer}
+.clip .play{position:relative;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.6);display:grid;place-items:center}
+.clip.none{background:var(--grad);font-size:2rem}
+.fb{padding:12px 14px 14px}
+.fw{font-size:1.25rem;font-weight:700;display:flex;align-items:center;gap:6px}
+.say2{font-size:1rem;padding:2px 6px;border-radius:8px}
+.fm{color:var(--muted);margin:2px 0 8px}
+.fs2{display:flex;justify-content:space-between;align-items:center;font-size:.8rem;color:var(--muted)}
+.bd{padding:2px 10px;border-radius:99px;font-weight:600;font-size:.75rem;color:#fff}
+.bd.new{background:#0ea5e9}.bd.learning{background:#f59e0b}.bd.mastered{background:var(--ok)}
+.del{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-size:1.1rem;z-index:2}
+
+/* review */
+.rv .top{display:flex;justify-content:space-between;color:var(--muted);font-size:.9rem;margin-bottom:10px;padding-right:30px}
+.rv .rw{font-size:1.8rem;font-weight:800;margin:12px 0 4px;display:flex;align-items:center;gap:8px}
+.rv .rs{color:var(--muted);font-style:italic;margin:0 0 12px}
+.rv .rm{font-size:1.3rem;font-weight:600;margin:0 0 14px;color:var(--a)}
+.rv .gr{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.rv .gr button{padding:10px 4px;border-radius:12px;border:1px solid var(--line);font-weight:600;line-height:1.2}
+.rv .gr small{display:block;font-weight:400;color:var(--muted)}
+.rv .gr .g0{color:var(--bad)}.rv .gr .g2{color:var(--ok)}
+.fin{text-align:center;padding:20px 0}.fin .big{font-size:3rem}
+
+/* ---------- profile ---------- */
+.ban{height:110px;border-radius:20px;background:var(--grad)}
+.me{margin:-46px 0 14px;text-align:center}
+.av{width:92px;height:92px;border-radius:50%;border:4px solid var(--bg);background:var(--a);color:#fff;font-size:2.2rem;font-weight:700;display:grid;place-items:center;margin:0 auto 8px}
+.me h2{margin:0;font-size:1.3rem}.me p{margin:0;color:var(--muted);font-size:.9rem}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.stats .card{text-align:center;padding:20px 10px}.stats b{display:block;font-size:2.6rem;line-height:1.1;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}.stats span{color:var(--muted);font-size:.9rem}
+
+#toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:#14213d;color:#fff;padding:10px 16px;border-radius:12px;font-size:.9rem;opacity:0;transition:.2s;z-index:90;pointer-events:none;max-width:90vw}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- laptop / desktop ---------- */
+@media (min-width:900px){
+  #app main{margin-left:88px;padding:24px 28px 32px}
+  #nav{top:var(--th);bottom:auto;right:auto;width:88px;height:calc(100dvh - var(--th));flex-direction:column;justify-content:flex-start;gap:6px;padding:20px 0 0;border-top:0;border-right:1px solid var(--line)}
+  #nav button{flex:none;height:72px}
+  #nav .nb{left:calc(50% + 10px)}
+  #v-videos .in{max-width:none}
+  #v-videos .top2{max-width:620px}
+  #stage{grid-template-columns:7fr 3fr;gap:16px;align-items:start}
+  #transcript{height:calc(100dvh - var(--th) - 80px)}
+  #stage.fs{display:flex}
+  #toast{bottom:28px}
+}
+
+/* ---------- custom player bar (replaces the native controls, so there is only ONE fullscreen button) ---------- */
+#bar{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;gap:8px;padding:22px 10px 8px;background:linear-gradient(0deg,rgba(0,0,0,.72),transparent);color:#fff;z-index:2}
+#player[hidden]~#bar{display:none}
+#bar button{width:34px;height:34px;flex:none;color:#fff;font-size:1rem}
+#bar input[type=range]{flex:1;min-width:0;padding:0;height:24px;border:0;background:none;accent-color:var(--a)}
+#tmx{font-size:.8rem;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* ---------- swipe between tabs ---------- */
+.view.sl{animation:sl .28s ease-out}
+.view.sr{animation:sr .28s ease-out}
+@keyframes sl{from{transform:translateX(44px);opacity:0}to{transform:none;opacity:1}}
+@keyframes sr{from{transform:translateX(-44px);opacity:0}to{transform:none;opacity:1}}
+
+/* ---------- Add screen (like Anki) ---------- */
+#addm{z-index:85}
+#addm .card{padding:0;overflow:hidden}
+.ah{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px solid var(--line);font-weight:700;font-size:1.05rem}
+.ah button{width:42px;height:42px;font-size:1.35rem;border-radius:10px}
+#addok{color:var(--ok);font-weight:800}
+.ab{padding:14px 16px 18px;display:grid;gap:12px}
+.lb{display:grid;gap:4px;font-size:.8rem;color:var(--muted)}
+.lb input,.lb select,select{font:inherit;font-size:1rem;width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
+.ctx{margin:0;color:var(--muted);font-style:italic;font-size:.88rem}
+#adderr{color:var(--bad);font-size:.88rem;margin:0;min-height:1.2em}
+
+/* ---------- My words: decks ---------- */
+.dks{display:grid;gap:10px;max-width:620px}
+.dk{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:16px;border-radius:16px;background:var(--card);border:1px solid var(--line);box-shadow:0 4px 18px rgba(20,33,61,.06)}
+.dk .dn{flex:1;min-width:0;font-weight:700;font-size:1.05rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dk .dm{color:var(--muted);font-size:.85rem;white-space:nowrap}
+.bd.due{background:var(--a)}
+.whead h2{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.back{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);font-size:1.2rem;flex:none}
+.fc .fw{padding-right:30px}
+.fc .fm{overflow-wrap:anywhere}
+.sep{border:0;border-top:1px solid var(--line);margin:10px 0}
+</style>
+</head>
+<body class="land">
+
+<header id="top">
+  <button class="logo" id="logo" aria-label="TheBestLearning home"><span class="lg">T</span><b>TheBestLearning</b></button>
+  <div id="topr">
+    <button id="pill" hidden title="My words"><span>📚</span><b id="pc">0</b><span class="plus">+1</span></button>
+    <button class="lnk" id="tlog">Log in</button>
+  </div>
+</header>
+
+<!-- ============ LANDING ============ -->
+<section id="landing">
+  <video id="bgv" autoplay muted loop playsinline preload="auto" hidden></video>
+  <div id="demo" aria-hidden="true"><div class="fake"></div><div id="dl"></div></div>
+  <div class="shade"></div>
+  <div class="hero">
+    <h1>Learn English from real videos, word by word.</h1>
+    <div class="cta">
+      <button class="btn" id="cs">Get started free</button>
+      <div class="orl">or</div>
+      <button class="btn alt" id="cl">Log in</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AUTH ============ -->
+<div class="modal" id="authm" hidden>
+  <form class="card" id="af" novalidate>
+    <button type="button" class="cx" id="ac" aria-label="Close">×</button>
+    <h2 id="at">Welcome back</h2>
+    <p class="sub" id="asub">Log in to continue learning.</p>
+    <div class="tabs"><button type="button" id="tl" class="on">Log in</button><button type="button" id="ts">Sign up</button></div>
+    <div class="f">
+      <input id="nm" name="name" type="text" placeholder="Your name" autocomplete="name" hidden>
+      <input id="em" name="email" type="email" placeholder="Email" autocomplete="email" inputmode="email" autocapitalize="none">
+      <div class="pw"><input id="pw" name="password" type="password" placeholder="Password (6+ characters)" autocomplete="current-password"><button type="button" id="eye">Show</button></div>
+    </div>
+    <p id="err" role="alert"></p>
+    <button class="btn" id="go" type="submit">Log in</button>
+  </form>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app" hidden>
+  <main>
+    <section class="view cur" id="v-videos"><div class="in">
+      <div class="top2">
+        <div class="link"><input id="url" type="url" placeholder="Paste a YouTube link" inputmode="url"><button class="btn" id="goyt">Go</button></div>
+        <label class="up"><div class="ic">⬆</div><div><b>Or upload a video</b><span>Pick an English video from your gallery</span></div><input id="file" type="file" accept="video/*" hidden></label>
+        <label class="up2">🎧 Podcast or audio file<input id="afile" type="file" accept="audio/*" hidden></label>
+        <p id="status"></p>
+        <div id="prog" hidden><i></i></div>
+        <button class="mini" id="stopb" hidden>■ Stop</button>
+        <div class="card" id="paste" hidden>
+          <b>Paste the transcript</b>
+          <p>On YouTube open the video, tap “…more”, then “Show transcript”. Copy all the text, paste it here and press the button. You can also choose a .srt or .vtt file.</p>
+          <textarea id="ptxt" placeholder="0:00&#10;Hello everyone…"></textarea>
+          <div class="link" style="margin:0"><button class="btn" id="pgo">Use this transcript</button><label class="up2" style="margin:0;flex:none;padding:0 14px">📄 File<input id="pfile" type="file" accept=".srt,.vtt,.txt,text/*" hidden></label></div>
+          <details><summary>Why did it fail?</summary><p id="preason"></p></details>
+        </div>
+      </div>
+      <div id="stage" hidden>
+        <div class="left">
+          <div id="vwrap">
+            <video id="player" playsinline></video>
+            <div id="ytbox" hidden></div>
+            <div id="bar"><button id="pp" aria-label="Play or pause">▶</button><input id="seek" type="range" min="0" max="1000" value="0" aria-label="Seek"><span id="tmx">0:00 / 0:00</span></div>
+            <button id="fsb" aria-label="Fullscreen with captions">⛶</button>
+          </div>
+        </div>
+        <div class="card" id="transcript"></div>
+      </div>
+    </div></section>
+
+    <section class="view" id="v-words"><div class="wide" id="wbody"></div></section>
+
+    <section class="view" id="v-profile"><div class="in">
+      <div class="ban"></div>
+      <div class="me"><div class="av" id="av"></div><h2 id="pn"></h2><p id="pe"></p></div>
+      <div class="stats">
+        <div class="card"><b id="s1">0</b><span>Words saved</span></div>
+        <div class="card"><b id="s2">0</b><span>Videos captioned</span></div>
+      </div>
+      <button class="btn alt" id="out">Sign out</button>
+    </div></section>
+  </main>
+  <nav id="nav">
+    <button class="on" data-v="videos"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></svg>Videos</button>
+    <button data-v="words"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14l-4-3H6a2 2 0 0 1-2-2z"/></svg>My words<span class="nb" id="nb" hidden>0</span></button>
+    <button data-v="profile"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Profile</button>
+  </nav>
+</div>
+
+<div id="tip" role="dialog" aria-label="Word meaning"></div>
+<div class="modal" id="rvm" hidden><div class="card rv" id="rv"></div></div>
+<div class="modal" id="addm" hidden>
+  <form class="card" id="addf" novalidate>
+    <div class="ah"><button type="button" id="addx" aria-label="Back">←</button><span>Add</span><button type="submit" id="addok" aria-label="Save card">✓</button></div>
+    <div class="ab">
+      <label class="lb">Type
+        <select id="addType">
+          <option value="basic">Basic · English front, Uzbek back</option>
+          <option value="rev">Basic + reversed · also Uzbek front, English back</option>
+        </select>
+      </label>
+      <label class="lb">Deck <select id="addDeck"></select></label>
+      <input id="addDeckNew" type="text" maxlength="40" placeholder="New deck name (e.g. Songs)" autocomplete="off" hidden>
+      <label class="lb">Front <input id="addFront" type="text" maxlength="80" autocomplete="off"></label>
+      <label class="lb">Back <input id="addBack" type="text" maxlength="120" autocomplete="off"></label>
+      <p class="ctx" id="addCtx"></p>
+      <p id="adderr" role="alert"></p>
+    </div>
+  </form>
+</div>
+<div id="toast"></div>
+
+<script>
+(function () {
+"use strict";
+
+/* Put a link to your own 10-second loop here (mp4/webm). Leave empty to use the built-in animated demo. */
+const LANDING_VIDEO = "";
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const norm = (w) => w.toLowerCase().replace(/^[^a-z0-9']+|[^a-z0-9']+$/g, "");
+const ls = {
+  get: (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} },
+  del: (k) => { try { localStorage.removeItem(k); } catch (e) {} },
+};
+
+let token = ls.get("tbl_token"), me = null, stats = { words: 0, videos: 0 }, decks = [], cards = [];
+let segs = [], ai = -1, aj = -1, kind = "file", yt = null, cur = null, tipS = null, job = null, nowEl = null, io = null;
+const player = $("player"), trc = {}, fcache = {};
+
+/* ================= API ================= */
+async function api(path, method, body) {
+  const h = {};
+  if (body) h["Content-Type"] = "application/json";
+  if (token) h.Authorization = "Bearer " + token;
+  let r;
+  try { r = await fetch(path, { method: method || "GET", headers: h, body: body ? JSON.stringify(body) : undefined }); }
+  catch (e) { throw new Error("No internet connection."); }
+  let j = null;
+  try { j = await r.json(); } catch (e) {}
+  if (!r.ok) {
+    const auth = path === "/api/login" || path === "/api/register";
+    if (r.status === 401 && token && !auth) signedOut();
+    const err = new Error((j && j.error) || "Server error " + r.status);
+    err.status = r.status; throw err;
+  }
+  return j;
+}
+function toast(t) { const el = $("toast"); el.textContent = t; el.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove("on"), 2400); }
+
+/* ================= landing ================= */
+if (LANDING_VIDEO) { const v = $("bgv"); v.src = LANDING_VIDEO; v.hidden = false; v.play().catch(() => {}); v.onerror = () => { v.hidden = true; }; $("demo").hidden = true; }
+const DEMO = [["She", "looked", "really", "exhausted", "today."], ["Could", "you", "give", "me", "a", "hand?"], ["It's", "a", "piece", "of", "cake!"]];
+let dn = 0;
+setInterval(() => {
+  if ($("landing").hidden || $("demo").hidden) return;
+  const s = DEMO[Math.floor(dn / 6) % 3], j = dn % 6; // 3 sentences x 6 steps x ~0.55s = 10s loop
+  $("dl").innerHTML = s.map((w, k) => "<span" + (k === j ? ' class="on"' : "") + ">" + esc(w) + "</span>").join(" ");
+  dn++;
+}, 555);
+
+/* ================= auth ================= */
+let mode = "login";
+function setMode(m) {
+  mode = m;
+  $("tl").classList.toggle("on", m === "login"); $("ts").classList.toggle("on", m === "signup");
+  $("nm").hidden = m === "login";
+  $("pw").autocomplete = m === "login" ? "current-password" : "new-password";
+  $("go").textContent = m === "login" ? "Log in" : "Create account";
+  $("at").textContent = m === "login" ? "Welcome back" : "Create your account";
+  $("asub").textContent = m === "login" ? "Log in to continue learning." : "It takes 10 seconds. No card needed.";
+  $("err").textContent = "";
+}
+function openAuth(m) { setMode(m); $("authm").hidden = false; setTimeout(() => (m === "signup" ? $("nm") : $("em")).focus(), 50); }
+function closeAuth() { $("authm").hidden = true; }
+$("tl").onclick = () => setMode("login");
+$("ts").onclick = () => setMode("signup");
+$("cs").onclick = () => openAuth("signup");
+$("cl").onclick = () => openAuth("login");
+$("tlog").onclick = () => openAuth("login");
+$("ac").onclick = closeAuth;
+$("authm").addEventListener("mousedown", (e) => { if (e.target === $("authm")) closeAuth(); });
+$("eye").onclick = () => { const p = $("pw"), s = p.type === "password"; p.type = s ? "text" : "password"; $("eye").textContent = s ? "Hide" : "Show"; };
+$("af").onsubmit = async (e) => {
+  e.preventDefault();
+  const name = $("nm").value.trim(), email = $("em").value.trim(), pw = $("pw").value, er = $("err");
+  er.textContent = "";
+  if (mode === "signup" && !name) return (er.textContent = "Please enter your name.");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return (er.textContent = "That email does not look right.");
+  if (pw.length < 6) return (er.textContent = "Password must be at least 6 characters.");
+  const b = $("go"), label = b.textContent; b.disabled = true; b.textContent = "Please wait…";
+  try {
+    const j = await api(mode === "login" ? "/api/login" : "/api/register", "POST", { name, email, password: pw });
+    token = j.token; ls.set("tbl_token", token);
+    await enter(j.user);
+    closeAuth(); $("pw").value = "";
+  } catch (err) { er.textContent = err.message; }
+  finally { b.disabled = false; b.textContent = label; }
+};
+
+async function enter(user) {
+  me = user;
+  const [m, d, c] = await Promise.all([api("/api/me"), api("/api/decks"), api("/api/cards")]);
+  stats = m.stats; decks = d.decks; cards = c.cards;
+  document.body.classList.remove("land");
+  $("landing").hidden = true; $("tlog").hidden = true; $("pill").hidden = false; $("app").hidden = false;
+  paintProfile(); paintStats(); go("videos");
+}
+function signedOut() {
+  token = null; ls.del("tbl_token"); me = null; decks = []; cards = []; stats = { words: 0, videos: 0 };
+  resetStage(); closeTip(); closeAdd(); $("rvm").hidden = true;
+  $("app").hidden = true; $("pill").hidden = true; $("tlog").hidden = false; $("landing").hidden = false;
+  document.body.classList.add("land");
+}
+$("out").onclick = async () => { try { await api("/api/logout", "POST", {}); } catch (e) {} signedOut(); };
+$("logo").onclick = () => { if (me) go("videos"); else closeAuth(); window.scrollTo(0, 0); };
+
+/* ================= navigation ================= */
+function go(v) {
+  document.querySelectorAll(".view").forEach((s) => s.classList.toggle("cur", s.id === "v-" + v));
+  document.querySelectorAll("#nav button").forEach((b) => b.classList.toggle("on", b.dataset.v === v));
+  closeTip(); window.scrollTo(0, 0);
+  if (v === "words") renderWords();
+  if (v === "profile") paintProfile();
+}
+document.querySelectorAll("#nav button").forEach((b) => (b.onclick = () => go(b.dataset.v)));
+$("pill").onclick = () => go("words");
+
+function paintProfile() {
+  if (!me) return;
+  const n = me.name || me.email.split("@")[0];
+  $("pn").textContent = n; $("pe").textContent = me.email; $("av").textContent = n[0].toUpperCase();
+}
+function paintStats() {
+  $("s1").textContent = stats.words; $("s2").textContent = stats.videos; $("pc").textContent = stats.words;
+  $("nb").hidden = !stats.words; $("nb").textContent = stats.words;
+}
+function bump() { const p = $("pill"); p.classList.remove("bump"); void p.offsetWidth; p.classList.add("bump"); }
+
+/* ================= player ================= */
+const time = () => (kind === "yt" ? (yt && yt.getCurrentTime ? yt.getCurrentTime() : 0) : player.currentTime);
+const pauseP = () => { if (kind === "yt") { if (yt && yt.pauseVideo) yt.pauseVideo(); } else player.pause(); };
+const playing = () => (kind === "yt" ? !!(yt && yt.getPlayerState && yt.getPlayerState() === 1) : !player.paused && !player.ended);
+const ytId = (u) => { const m = u.match(/(?:youtu\.be\/|v=|\/shorts\/|\/embed\/|\/live\/)([A-Za-z0-9_-]{11})/); return m ? m[1] : /^[A-Za-z0-9_-]{11}$/.test(u.trim()) ? u.trim() : null; };
+const ytApi = () => new Promise((ok, no) => {
+  if (window.YT && YT.Player) return ok();
+  const s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api"; s.onerror = () => no(new Error("player")); document.head.appendChild(s);
+  window.onYouTubeIframeAPIReady = ok; setTimeout(() => { if (!(window.YT && YT.Player)) no(new Error("player")); }, 10000);
+});
+function resetStage() {
+  if (job) job.stop = true; job = null; stopUI(); prog(null); $("paste").hidden = true;
+  segs = []; ai = aj = -1; cur = null;
+  try { player.pause(); } catch (e) {}
+  player.removeAttribute("src"); if (yt && yt.destroy) { try { yt.destroy(); } catch (e) {} } yt = null; $("ytbox").innerHTML = "";
+  $("stage").hidden = true; exitFs(); status("");
+}
+function showStage() { $("stage").hidden = false; segs = []; drawT(); }
+async function loadYT(id) {
+  await ytApi(); kind = "yt"; player.pause(); player.hidden = true; $("ytbox").hidden = false;
+  if (yt && yt.destroy) yt.destroy();
+  $("ytbox").innerHTML = '<div id="ytp"></div>';
+  yt = new YT.Player("ytp", { videoId: id, playerVars: { playsinline: 1, fs: 0, rel: 0 } });
+}
+function status(t, cls) {
+  const el = $("status"); el.className = cls || "";
+  el.innerHTML = cls === "good" ? '<span class="tick">✓</span><span>' + esc(t) + "</span>" : esc(t);
+}
+function prog(p) { const b = $("prog"); b.hidden = p == null; if (p != null) b.firstElementChild.style.width = Math.round(p * 100) + "%"; }
+
+async function finishVideo(title) {
+  prog(null); status("Captions ready", "good");
+  try { const j = await api("/api/videos", "POST", { kind: cur.kind, key: cur.key, title }); stats = j.stats; paintStats(); } catch (e) {}
+}
+
+$("goyt").onclick = async () => {
+  const id = ytId($("url").value);
+  if (!id) return status("That does not look like a YouTube link.", "bad");
+  resetStage(); const mine = (cur = { kind: "yt", key: id, yt: id }); showStage(); status("Getting captions…");
+  const caps = api("/api/yt", "POST", { id }).then((j) => ({ j }), (e) => ({ e })); // starts at once, while the player is loading
+  let perr = false;
+  try { await loadYT(id); } catch (e) { perr = true; }
+  const r = await caps;
+  if (cur !== mine) return;
+  if (r.e) return noCaps(r.e.message);
+  add(r.j.segments, 0); await finishVideo("YouTube " + id);
+  if (perr) status("Captions are ready, but the YouTube player could not load.", "bad");
+};
+function noCaps(reason) {
+  status("The captions could not be loaded automatically (YouTube sometimes blocks servers). Paste the transcript below, it takes 20 seconds.", "bad");
+  $("preason").textContent = reason || ""; $("paste").hidden = false;
+}
+
+/* ---- transcript pasted from YouTube, or a .srt / .vtt file ---- */
+function parseTranscript(raw) {
+  const t = String(raw).replace(/^﻿/, "").replace(/\r/g, "").trim();
+  const T = (s) => { const p = s.replace(",", ".").split(":").map(Number); return p.length === 3 ? p[0] * 3600 + p[1] * 60 + p[2] : p.length === 2 ? p[0] * 60 + p[1] : NaN; };
+  let cues = [];
+  if (t.includes("-->")) {
+    let prev = [];
+    for (const b of t.split(/\n{2,}/)) {
+      const L = b.split("\n"), k = L.findIndex((l) => l.includes("-->")); if (k < 0) continue;
+      const m = L[k].match(/([\d:.,]+)\s*-->\s*([\d:.,]+)/); if (!m) continue;
+      const own = L.slice(k + 1).map((l) => l.replace(/<[^>]+>/g, "").trim()).filter(Boolean);
+      const fresh = own.filter((l) => !prev.includes(l)); prev = own; // auto captions repeat the previous line
+      if (fresh.length) cues.push({ start: T(m[1]), end: T(m[2]), text: fresh.join(" ") });
+    }
+  } else {
+    let c = null;
+    for (const l of t.split("\n").map((x) => x.trim()).filter(Boolean)) {
+      const m = l.match(/^(\d{1,2}:\d{2}(?::\d{2})?)(?:\s+(.*))?$/);
+      if (m) { if (c) cues.push(c); c = { start: T(m[1]), text: m[2] || "" }; }
+      else if (c) c.text += (c.text ? " " : "") + l;
+    }
+    if (c) cues.push(c);
+    cues.forEach((x, i) => { x.end = i + 1 < cues.length ? cues[i + 1].start : x.start + 4; });
+  }
+  cues = cues.filter((c) => isFinite(c.start) && isFinite(c.end) && c.text).sort((a, b) => a.start - b.start);
+  if (!cues.length) throw new Error("I could not find any timestamps. Paste text like “0:05” with the sentence under it, or choose a .srt / .vtt file.");
+  const out = []; let cu = null;
+  for (const c of cues) {
+    const x = c.text.replace(/\s+/g, " ").trim();
+    if (!cu) cu = { start: c.start, end: c.end, text: x }; else { cu.text += " " + x; cu.end = c.end; }
+    if (cu.text.length >= 70 || /[.!?]$/.test(cu.text)) { out.push(cu); cu = null; }
+  }
+  if (cu) out.push(cu);
+  return out;
+}
+async function usePasted(text) {
+  if (!cur || cur.kind !== "yt") return;
+  const mine = cur;
+  try {
+    const list = parseTranscript(text);
+    $("paste").hidden = true; segs = []; drawT(); add(list, 0);
+    await finishVideo("YouTube " + mine.yt);
+  } catch (e) { status(e.message, "bad"); }
+}
+$("pgo").onclick = () => usePasted($("ptxt").value);
+$("pfile").onchange = async (e) => { const f = e.target.files[0]; e.target.value = ""; if (f) { const tx = await f.text(); $("ptxt").value = tx.slice(0, 400000); usePasted(tx); } };
+
+/* ================= uploaded video or podcast ================= */
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+let wake = null;
+async function keepAwake(on) {
+  try {
+    if (on) { if (!wake && navigator.wakeLock) { wake = await navigator.wakeLock.request("screen"); wake.addEventListener("release", () => { wake = null; }); } }
+    else if (wake) { await wake.release(); wake = null; }
+  } catch (e) {}
+}
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && job && !job.stop) keepAwake(true); });
+function stopUI() { $("stopb").hidden = true; keepAwake(false); }
+$("stopb").onclick = () => { if (job) { job.stop = true; $("stopb").hidden = true; status("Stopping…"); } };
+$("file").onchange = $("afile").onchange = (e) => { const f = e.target.files[0]; e.target.value = ""; if (f) startFile(f); };
+
+async function startFile(f) {
+  resetStage(); kind = "file"; player.hidden = false; $("ytbox").hidden = true;
+  const url = URL.createObjectURL(f), key = "file:" + f.name + ":" + f.size;
+  const mine = (cur = { kind: "file", key, yt: null, url }), my = (job = { stop: false, raw: [] });
+  player.src = url; showStage();
+  try {
+    let start = 0;
+    status("Looking for saved captions…");
+    const sv = await api("/api/captions?key=" + encodeURIComponent(key)).catch(() => null);
+    if (cur !== mine) return;
+    if (sv && sv.data) {
+      try { my.raw = JSON.parse(sv.data); } catch (e) { my.raw = []; }
+      if (my.raw.length) { add(my.raw, 0); start = sv.upto || 0; }
+      if (sv.done && my.raw.length) { stopUI(); await finishVideo(f.name); return; }
+    }
+    $("stopb").hidden = false; keepAwake(true);
+    status("Preparing audio…");
+    await transcribe(f, mine, my, start);
+  } catch (err) {
+    if (cur !== mine) return;
+    stopUI(); prog(null);
+    status("Could not create captions: " + err.message + (my.raw.length ? " Your progress is saved. Pick the same file again to continue." : ""), "bad");
+  }
+}
+
+async function sendChunk(pcm, my) {
+  let peak = 0; for (let k = 0; k < pcm.length; k += 40) peak = Math.max(peak, Math.abs(pcm[k]));
+  if (peak < 0.008) return []; // silence: nothing to send
+  const a = b64(wav(pcm));
+  for (let t = 0; ; t++) {
+    if (my.stop) return [];
+    try { return (await api("/api/transcribe", "POST", { audio: a })).segments || []; }
+    catch (er) {
+      if (er.status === 401 || /limit for today/.test(er.message) || t >= 4) throw er;
+      await sleep(1500 * 2 ** t);
+    }
+  }
+}
+
+async function transcribe(f, mine, my, start) {
+  const src = await openAudio(f), t00 = Date.now(), from = start;
+  let pos = start, lastSave = 0;
+  const save = (done) => api("/api/captions", "PUT", { key: mine.key, data: JSON.stringify(my.raw), upto: pos, total: src.duration || 0, done: !!done }).catch(() => {});
+  const show = () => {
+    const tot = src.duration || 0, el = (Date.now() - t00) / 1000, rate = (pos - from) / el;
+    if (tot) prog(Math.min(1, pos / tot));
+    const eta = el > 25 && rate > 0 && tot ? " · about " + Math.max(1, Math.round((tot - pos) / rate / 60)) + " min left" : "";
+    status("Creating captions… " + fmt(pos) + (tot ? " / " + fmt(tot) : "") + eta + " · keep this screen open");
+  };
+  const gen = src.chunks(start), fly = []; let eof = false;
+  const pull = async () => {
+    const it = await gen.next();
+    if (it.done) { eof = true; return; }
+    const c = it.value, p = sendChunk(c.pcm, my); p.catch(() => {});
+    fly.push({ t0: c.t0, len: c.pcm.length / 16000, p });
+  };
+  try {
+    show();
+    while (!my.stop) {
+      while (!eof && fly.length < 3 && !my.stop) await pull(); // up to 3 pieces are sent at the same time
+      if (!fly.length) break;
+      const h = fly.shift(), r = await h.p;
+      if (cur !== mine || my.stop) break;
+      for (const g of r) my.raw.push({ start: g.start + h.t0, end: g.end + h.t0, text: g.text });
+      add(r, h.t0); pos = h.t0 + h.len; show();
+      if (Date.now() - lastSave > 15000) { lastSave = Date.now(); save(false); }
+    }
+  } catch (err) {
+    if (my.raw.length) await save(false);
+    throw err;
+  } finally { try { await gen.return(); } catch (e) {} }
+  if (cur !== mine) return;
+  stopUI(); prog(null);
+  if (my.stop) { await save(false); status("Stopped at " + fmt(pos) + ". The captions so far are saved. Pick the same file again to continue."); return; }
+  if (!my.raw.length) throw new Error("No speech found in this file.");
+  pos = src.duration || pos; await save(true); await finishVideo(f.name);
+}
+
+/* ---------- reading the audio piece by piece (so a 2-hour podcast does not fill the phone's memory) ---------- */
+const R16 = 16000;
+function resampler(sr) {
+  const r = sr / R16; let sum = 0, filled = 0;
+  return (x) => {
+    const out = new Float32Array(Math.ceil(x.length / r) + 2); let o = 0;
+    for (let i = 0; i < x.length; i++) {
+      const v = x[i]; let left = 1;
+      while (filled + left >= r - 1e-9) { const take = r - filled; sum += v * take; out[o++] = sum / r; sum = 0; filled = 0; left -= take; if (left < 1e-9) { left = 0; break; } }
+      if (left > 0) { sum += v * left; filled += left; }
+    }
+    return out.subarray(0, o);
+  };
+}
+function quietCut(buf) { // cut inside the last 4 s of a 30 s window, at the quietest 50 ms, so words are not split
+  const MAX = 30 * R16, F = 800; let best = MAX, be = Infinity;
+  for (let a = MAX - 4 * R16; a + F <= MAX; a += F) { let e = 0; for (let k = a; k < a + F; k++) e += buf[k] * buf[k]; if (e < be) { be = e; best = a + (F >> 1); } }
+  return best;
+}
+async function* chunkStream(blocks, startAt) {
+  const MAX = 30 * R16;
+  let rs = null, buf = new Float32Array(MAX + R16 * 10), len = 0, t0 = 0, skip = 0;
+  for await (const b of blocks) {
+    if (!rs) { rs = resampler(b.sr); skip = Math.max(0, Math.round((startAt - b.ts) * R16)); t0 = Math.max(b.ts, startAt); }
+    const n = b.ch[0].length; let mono = b.ch[0];
+    if (b.ch.length > 1) { mono = new Float32Array(n); for (const c of b.ch) for (let i = 0; i < n; i++) mono[i] += c[i]; const k = 1 / b.ch.length; for (let i = 0; i < n; i++) mono[i] *= k; }
+    let x = rs(mono);
+    if (skip > 0) { const d = Math.min(skip, x.length); x = x.subarray(d); skip -= d; }
+    if (len + x.length > buf.length) { const nb = new Float32Array((len + x.length) * 2); nb.set(buf.subarray(0, len)); buf = nb; }
+    buf.set(x, len); len += x.length;
+    while (len >= MAX) { const c = quietCut(buf); yield { t0, pcm: buf.slice(0, c) }; buf.copyWithin(0, c, len); len -= c; t0 += c / R16; }
+  }
+  if (len > R16 / 2) yield { t0, pcm: buf.slice(0, len) };
+}
+function audioBlock(a) {
+  const ch = [];
+  for (let c = 0; c < a.numberOfChannels; c++) { const d = new Float32Array(a.numberOfFrames); a.copyTo(d, { planeIndex: c, format: "f32-planar" }); ch.push(d); }
+  const b = { ts: a.timestamp / 1e6, ch, sr: a.sampleRate }; a.close(); return b;
+}
+async function* decodeStream(cfg, packets) {
+  const q = []; let err = null, wk = null;
+  const dec = new AudioDecoder({ output: (a) => q.push(a), error: (e) => { err = e; if (wk) wk(); } });
+  try {
+    dec.configure(cfg);
+    for await (const p of packets) {
+      if (err) throw err;
+      if (!p.data.length) continue;
+      dec.decode(new EncodedAudioChunk({ type: "key", timestamp: Math.round(p.ts * 1e6), duration: Math.round((p.dur || 0) * 1e6), data: p.data }));
+      while (dec.decodeQueueSize > 24 && !err) await new Promise((r) => { wk = r; dec.addEventListener("dequeue", r, { once: true }); });
+      if (err) throw err;
+      while (q.length) yield audioBlock(q.shift());
+    }
+    await dec.flush();
+    if (err) throw err;
+    while (q.length) yield audioBlock(q.shift());
+  } finally { try { dec.close(); } catch (e) {} for (const a of q) a.close(); }
+}
+const mkSrc = (duration, blocks) => ({ duration, blocks, chunks: (s) => chunkStream(blocks(s), s) });
+
+/* MP3 */
+const MP3_BR1 = [0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320], MP3_BR2 = [0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160];
+const MP3_SR = { 3: [44100, 48000, 32000], 2: [22050, 24000, 16000], 0: [11025, 12000, 8000] };
+function mp3Head(u, i) {
+  if (i + 4 > u.length || u[i] !== 0xff || (u[i + 1] & 0xe0) !== 0xe0) return null;
+  const v = (u[i + 1] >> 3) & 3, l = (u[i + 1] >> 1) & 3, bi = u[i + 2] >> 4, si = (u[i + 2] >> 2) & 3;
+  if (v === 1 || l !== 1 || bi === 0 || bi === 15 || si === 3) return null;
+  const br = (v === 3 ? MP3_BR1 : MP3_BR2)[bi] * 1000, sr = MP3_SR[v][si];
+  return { len: Math.floor(((v === 3 ? 144 : 72) * br) / sr) + ((u[i + 2] >> 1) & 1), sr, spf: v === 3 ? 1152 : 576, ch: u[i + 3] >> 6 === 3 ? 1 : 2, br };
+}
+async function* mp3Packets(f, pos, startAt, skipFirst) {
+  let off = pos, buf = new Uint8Array(0), bi = 0, eof = false, no = 0, first = true;
+  const more = async () => {
+    const nb = new Uint8Array(await f.slice(off, off + (1 << 21)).arrayBuffer()); off += nb.length;
+    const rest = buf.subarray(bi), m = new Uint8Array(rest.length + nb.length); m.set(rest); m.set(nb, rest.length); buf = m; bi = 0; return nb.length;
+  };
+  for (;;) {
+    if (buf.length - bi < 4096 && !eof && !(await more())) eof = true;
+    if (buf.length - bi < 4) break;
+    const h = mp3Head(buf, bi);
+    if (!h) { bi++; continue; }
+    if (bi + h.len > buf.length) break;
+    if (skipFirst && first) { first = false; bi += h.len; continue; } // the Xing/Info frame holds no sound
+    first = false;
+    const ts = (no * h.spf) / h.sr; no++;
+    if (ts >= startAt - (12 * h.spf) / h.sr) yield { data: buf.slice(bi, bi + h.len), ts, dur: h.spf / h.sr };
+    bi += h.len;
+  }
+}
+async function mp3Source(f) {
+  const first = new Uint8Array(await f.slice(0, 16384).arrayBuffer());
+  let p0 = 0;
+  if (first[0] === 0x49 && first[1] === 0x44 && first[2] === 0x33) p0 = 10 + (((first[6] & 127) << 21) | ((first[7] & 127) << 14) | ((first[8] & 127) << 7) | (first[9] & 127)) + (first[5] & 16 ? 10 : 0);
+  const pr = new Uint8Array(await f.slice(p0, p0 + 65536).arrayBuffer());
+  let q = 0, h = null; while (q + 4 < pr.length && !(h = mp3Head(pr, q))) q++;
+  if (!h) throw new Error("not an mp3");
+  let xi = -1;
+  for (let k = q + 4; k < q + 44; k++) if ((pr[k] === 0x58 && pr[k + 1] === 0x69 && pr[k + 2] === 0x6e && pr[k + 3] === 0x67) || (pr[k] === 0x49 && pr[k + 1] === 0x6e && pr[k + 2] === 0x66 && pr[k + 3] === 0x6f)) { xi = k; break; }
+  let frames = 0;
+  if (xi > 0 && pr[xi + 7] & 1) frames = ((pr[xi + 8] << 24) | (pr[xi + 9] << 16) | (pr[xi + 10] << 8) | pr[xi + 11]) >>> 0;
+  const duration = frames ? (frames * h.spf) / h.sr : (f.size - p0 - q) / (h.br / 8);
+  const cfg = { codec: "mp3", sampleRate: h.sr, numberOfChannels: h.ch };
+  if (!(await AudioDecoder.isConfigSupported(cfg)).supported) throw new Error("mp3 not supported");
+  const blocks = (s) => decodeStream(cfg, mp3Packets(f, p0 + q, s, xi > 0)), src = mkSrc(duration, blocks);
+  src.chunks = (s) => chunkStream(blocks(s), Math.max(s, 0.04)); // the first 40 ms of an MP3 is encoder noise
+  return src;
+}
+
+/* WAV */
+async function wavSource(f) {
+  const hd = new DataView(await f.slice(0, 65536).arrayBuffer());
+  const id = (o) => String.fromCharCode(hd.getUint8(o), hd.getUint8(o + 1), hd.getUint8(o + 2), hd.getUint8(o + 3));
+  let p = 12, fm = null, dOff = 0, dLen = 0;
+  while (p + 8 <= hd.byteLength) {
+    const name = id(p), sz = hd.getUint32(p + 4, true);
+    if (name === "fmt ") fm = { tag: hd.getUint16(p + 8, true), ch: hd.getUint16(p + 10, true), sr: hd.getUint32(p + 12, true), bits: hd.getUint16(p + 22, true) };
+    if (name === "data") { dOff = p + 8; dLen = Math.min(sz, f.size - dOff); break; }
+    p += 8 + sz + (sz & 1);
+  }
+  if (!fm || !dOff || !((fm.tag === 1 && fm.bits === 16) || (fm.tag === 3 && fm.bits === 32))) throw new Error("wav format");
+  const fr = (fm.ch * fm.bits) / 8, total = Math.floor(dLen / fr);
+  return mkSrc(total / fm.sr, async function* (s) {
+    let k = Math.min(total, Math.floor(s * fm.sr)); const step = fm.sr * 20;
+    while (k < total) {
+      const n = Math.min(step, total - k), v = new DataView(await f.slice(dOff + k * fr, dOff + (k + n) * fr).arrayBuffer());
+      const ch = []; for (let c = 0; c < fm.ch; c++) ch.push(new Float32Array(n));
+      for (let i = 0; i < n; i++) for (let c = 0; c < fm.ch; c++) ch[c][i] = fm.tag === 3 ? v.getFloat32((i * fm.ch + c) * 4, true) : v.getInt16((i * fm.ch + c) * 2, true) / 32768;
+      yield { ts: k / fm.sr, ch, sr: fm.sr }; k += n;
+    }
+  });
+}
+
+/* MP4 / M4A / MOV: read only the audio track (the video data is never loaded) */
+async function mp4Source(f) {
+  let pos = 0, moov = null;
+  while (pos + 8 <= f.size) {
+    const h = new DataView(await f.slice(pos, pos + 16).arrayBuffer());
+    let sz = h.getUint32(0), hl = 8; const ty = String.fromCharCode(h.getUint8(4), h.getUint8(5), h.getUint8(6), h.getUint8(7));
+    if (sz === 1 && h.byteLength >= 16) { sz = h.getUint32(8) * 4294967296 + h.getUint32(12); hl = 16; } else if (sz === 0) sz = f.size - pos;
+    if (sz < hl) break;
+    if (ty === "moov") { moov = await f.slice(pos + hl, pos + sz).arrayBuffer(); break; }
+    pos += sz;
+  }
+  if (!moov) throw new Error("no moov box");
+  const dv = new DataView(moov), u8 = new Uint8Array(moov), T = (o) => String.fromCharCode(u8[o], u8[o + 1], u8[o + 2], u8[o + 3]);
+  const kids = (s, e) => {
+    const out = [];
+    while (s + 8 <= e) { let sz = dv.getUint32(s), hl = 8; if (sz === 1) { sz = dv.getUint32(s + 8) * 4294967296 + dv.getUint32(s + 12); hl = 16; } else if (sz === 0) sz = e - s; if (sz < hl || s + sz > e) break; out.push({ t: T(s + 4), s: s + hl, e: s + sz }); s += sz; }
+    return out;
+  };
+  const path = (b, ...names) => { for (const n of names) { if (!b) return null; b = kids(b.s, b.e).find((x) => x.t === n) || null; } return b; };
+  const trak = kids(0, moov.byteLength).filter((b) => b.t === "trak").find((b) => { const h = path(b, "mdia", "hdlr"); return h && T(h.s + 8) === "soun"; });
+  if (!trak) throw new Error("no audio track");
+  const mdhd = path(trak, "mdia", "mdhd"), stbl = path(trak, "mdia", "minf", "stbl");
+  const v1 = u8[mdhd.s] === 1, scale = dv.getUint32(mdhd.s + (v1 ? 20 : 12));
+  const mdur = v1 ? dv.getUint32(mdhd.s + 24) * 4294967296 + dv.getUint32(mdhd.s + 28) : dv.getUint32(mdhd.s + 16);
+  const stsd = path(stbl, "stsd"), es = stsd.s + 8, entryEnd = es + dv.getUint32(es), ety = T(es + 4);
+  const sver = dv.getUint16(es + 16), ch = dv.getUint16(es + 24), sr = dv.getUint16(es + 32);
+  const ek = kids(es + 36 + (sver === 1 ? 16 : sver === 2 ? 36 : 0), entryEnd);
+  let cfg = null;
+  if (ety === "mp4a") {
+    const d = ek.find((x) => x.t === "esds"); if (!d) throw new Error("no esds");
+    let p = d.s + 4, ot = 0, asc = null;
+    const len = () => { let n = 0; for (let k = 0; k < 4; k++) { const b = u8[p++]; n = (n << 7) | (b & 127); if (!(b & 128)) break; } return n; };
+    while (p < d.e) {
+      const tag = u8[p++], l = len(), end = p + l;
+      if (tag === 3) { p += 2; const fl = u8[p++]; if (fl & 0x80) p += 2; if (fl & 0x40) p += 1 + u8[p]; if (fl & 0x20) p += 2; continue; }
+      if (tag === 4) { ot = u8[p]; p += 13; continue; }
+      if (tag === 5) { asc = u8.slice(p, end); break; }
+      p = end;
+    }
+    if (ot === 0x6b || ot === 0x69) cfg = { codec: "mp3", sampleRate: sr, numberOfChannels: ch };
+    else if (ot === 0x40 && asc && asc.length > 1) { let aot = asc[0] >> 3; if (aot === 31) aot = 32 + (((asc[0] & 7) << 3) | (asc[1] >> 5)); cfg = { codec: "mp4a.40." + aot, sampleRate: sr, numberOfChannels: ch, description: asc }; }
+  } else if (ety === "Opus") {
+    const d = ek.find((x) => x.t === "dOps"); if (!d) throw new Error("no dOps");
+    const map = u8.subarray(d.s + 11, d.e), oh = new Uint8Array(19 + map.length), ov = new DataView(oh.buffer);
+    oh.set([0x4f, 0x70, 0x75, 0x73, 0x48, 0x65, 0x61, 0x64, 1, u8[d.s + 1]]);
+    ov.setUint16(10, dv.getUint16(d.s + 2), true); ov.setUint32(12, dv.getUint32(d.s + 4), true); ov.setInt16(16, dv.getInt16(d.s + 8), true); oh[18] = u8[d.s + 10]; oh.set(map, 19);
+    cfg = { codec: "opus", sampleRate: 48000, numberOfChannels: u8[d.s + 1], description: oh };
+  }
+  if (!cfg || !(await AudioDecoder.isConfigSupported(cfg)).supported) throw new Error("audio codec not supported");
+  // sample table: where every audio packet is, how big, and at what time
+  const stsz = path(stbl, "stsz"), n = dv.getUint32(stsz.s + 8), fixed = dv.getUint32(stsz.s + 4), sizes = new Uint32Array(n);
+  for (let i = 0; i < n; i++) sizes[i] = fixed || dv.getUint32(stsz.s + 12 + 4 * i);
+  const stco = path(stbl, "stco"), co64 = path(stbl, "co64"), cb = stco || co64;
+  if (!n || !cb) throw new Error("empty or fragmented mp4");
+  const cn = dv.getUint32(cb.s + 4), coff = new Float64Array(cn);
+  for (let i = 0; i < cn; i++) coff[i] = stco ? dv.getUint32(cb.s + 8 + 4 * i) : dv.getUint32(cb.s + 8 + 8 * i) * 4294967296 + dv.getUint32(cb.s + 12 + 8 * i);
+  const stsc = path(stbl, "stsc"), sn = dv.getUint32(stsc.s + 4), offs = new Float64Array(n);
+  let si = 0;
+  for (let r = 0; r < sn; r++) {
+    const first = dv.getUint32(stsc.s + 8 + 12 * r), spc = dv.getUint32(stsc.s + 12 + 12 * r), last = r + 1 < sn ? dv.getUint32(stsc.s + 8 + 12 * (r + 1)) - 1 : cn;
+    for (let c = first; c <= last && si < n; c++) { let o = coff[c - 1]; for (let k = 0; k < spc && si < n; k++) { offs[si] = o; o += sizes[si]; si++; } }
+  }
+  const stts = path(stbl, "stts"), tn = dv.getUint32(stts.s + 4), times = new Float64Array(n);
+  let tt = 0, ix = 0;
+  for (let r = 0; r < tn; r++) { const cnt = dv.getUint32(stts.s + 8 + 8 * r), d = dv.getUint32(stts.s + 12 + 8 * r); for (let k = 0; k < cnt && ix < n; k++) { times[ix++] = tt / scale; tt += d; } }
+  const duration = mdur ? mdur / scale : times[n - 1];
+  const batch = (i0) => { let j = i0 + 1, end = offs[i0] + sizes[i0]; while (j < n && offs[j] === end && end - offs[i0] < 4e6) { end += sizes[j]; j++; } return { i0, j, a: offs[i0], b: end }; };
+  async function* packets(startAt) {
+    let lo = 0, hi = n - 1, r = 0; while (lo <= hi) { const m = (lo + hi) >> 1; if (times[m] <= startAt) { r = m; lo = m + 1; } else hi = m - 1; }
+    let c = batch(Math.max(0, r - 6)), cp = f.slice(c.a, c.b).arrayBuffer();
+    for (;;) {
+      const nx = c.j < n ? batch(c.j) : null, np = nx ? f.slice(nx.a, nx.b).arrayBuffer() : null; // the next piece is read while this one is decoded
+      const buf = new Uint8Array(await cp);
+      for (let k = c.i0; k < c.j; k++) { const o = offs[k] - c.a; yield { data: buf.subarray(o, o + sizes[k]), ts: times[k], dur: k + 1 < n ? times[k + 1] - times[k] : 0 }; }
+      if (!nx) break; c = nx; cp = np;
+    }
+  }
+  return mkSrc(duration, (s) => decodeStream(cfg, packets(s)));
+}
+
+/* anything else: decode the whole file (only small files) */
+function wholeSource(f) {
+  if (f.size > 90e6) throw new Error("This file is too big to open in one piece on this device. Please use an MP3, M4A or MP4 file (those are read piece by piece), or a smaller file.");
+  const src = mkSrc(0, async function* (s) {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: R16 });
+    let buf;
+    try { buf = await ctx.decodeAudioData(await f.arrayBuffer()); }
+    catch (e) { throw new Error("The sound of this file could not be read. Please try an MP3, M4A or MP4 file."); }
+    finally { ctx.close(); }
+    src.duration = buf.duration;
+    const chs = []; for (let c = 0; c < buf.numberOfChannels; c++) chs.push(buf.getChannelData(c));
+    const step = R16 * 30;
+    for (let k = Math.floor(s * R16); k < buf.length; k += step) yield { ts: k / R16, ch: chs.map((c) => c.subarray(k, k + step)), sr: R16 };
+  });
+  return src;
+}
+async function openAudio(f) {
+  const h = new Uint8Array(await f.slice(0, 12).arrayBuffer()), a = (i, j) => String.fromCharCode(...h.subarray(i, j));
+  const wc = typeof AudioDecoder !== "undefined" && typeof EncodedAudioChunk !== "undefined";
+  try {
+    if (a(0, 4) === "RIFF" && a(8, 12) === "WAVE") return await wavSource(f);
+    if (wc && a(4, 8) === "ftyp") return await mp4Source(f);
+    if (wc && (a(0, 3) === "ID3" || (h[0] === 0xff && (h[1] & 0xe0) === 0xe0))) return await mp3Source(f);
+  } catch (e) { console.warn("piece-by-piece reading failed, trying the whole file:", e); }
+  return wholeSource(f);
+}
+function wav(f) {
+  const b = new ArrayBuffer(44 + f.length * 2), v = new DataView(b), s = (o, t) => { for (let i = 0; i < t.length; i++) v.setUint8(o + i, t.charCodeAt(i)); };
+  s(0, "RIFF"); v.setUint32(4, 36 + f.length * 2, true); s(8, "WAVEfmt "); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+  v.setUint32(24, 16000, true); v.setUint32(28, 32000, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); s(36, "data"); v.setUint32(40, f.length * 2, true);
+  for (let i = 0; i < f.length; i++) { const x = Math.max(-1, Math.min(1, f[i])); v.setInt16(44 + i * 2, x < 0 ? x * 32768 : x * 32767, true); }
+  return new Uint8Array(b);
+}
+function b64(u) { let s = ""; for (let i = 0; i < u.length; i += 8192) s += String.fromCharCode.apply(null, u.subarray(i, i + 8192)); return btoa(s); }
+
+/* fullscreen: video on top, captions under it */
+function exitFs() { $("stage").classList.remove("fs"); $("fsb").textContent = "⛶"; if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); }
+$("fsb").onclick = async () => {
+  const st = $("stage");
+  if (st.classList.contains("fs")) return exitFs();
+  st.classList.add("fs"); $("fsb").textContent = "✕";
+  try { await st.requestFullscreen(); } catch (e) {}
+  closeTip();
+};
+document.addEventListener("fullscreenchange", () => { if (!document.fullscreenElement) exitFs(); });
+addEventListener("keydown", (e) => {
+  if (e.key === "Escape") { closeTip(); exitFs(); }
+  if (e.target.matches("input,textarea") || kind !== "file" || !player.src || $("app").hidden || !$("v-videos").classList.contains("cur")) return;
+  if (e.code === "Space") { e.preventDefault(); player.paused ? player.play() : player.pause(); }
+  if (e.code === "ArrowLeft") player.currentTime -= 5;
+  if (e.code === "ArrowRight") player.currentTime += 5;
+});
+
+/* ================= captions ================= */
+function add(list, off) {
+  const fresh = [], first = segs.length;
+  for (const g of list || []) {
+    const text = (g.text || "").trim(); if (!text) continue;
+    const s = g.start + off, e = g.end + off;
+    let w = (g.words || []).map((x) => ({ t: (x.word || "").trim(), s: x.start + off, e: x.end + off })).filter((x) => x.t);
+    if (!w.length) {
+      const p = text.split(/\s+/), tot = p.join("").length || 1; let c = s;
+      w = p.map((t) => { const d = ((e - s) * t.length) / tot, o = { t, s: c, e: c + d }; c += d; return o; });
+    }
+    const seg = { s, e, text, w, uz: "", i: segs.length }; segs.push(seg); fresh.push(seg);
+  }
+  if (fresh.length) appendT(fresh, first);
+}
+const wordsHTML = (g, i) => '<span class="en">' + g.w.map((x, j) => '<span class="w" data-i="' + i + '" data-j="' + j + '">' + esc(x.t) + "</span>").join(" ") + "</span>";
+const segHTML = (g, i) => '<p class="seg" data-i="' + i + '">' + wordsHTML(g, i) + '<span class="uz">' + esc(g.uz) + "</span></p>";
+const segEl = (i) => $("transcript").children[i] || null;
+// new lines are only added at the end (the page does not redraw the whole transcript), so very long videos stay fast
+function appendT(fresh, first) {
+  const tr = $("transcript");
+  if (!first) tr.innerHTML = "";
+  tr.insertAdjacentHTML("beforeend", fresh.map((g, k) => segHTML(g, first + k)).join(""));
+  markSaved(first);
+  if (!io) io = new IntersectionObserver(seen, { root: tr, rootMargin: "400px 0px" });
+  for (let k = first; k < segs.length; k++) io.observe(tr.children[k]);
+}
+function drawT() {
+  if (io) { io.disconnect(); io = null; }
+  trq.length = 0; nowEl = null; ai = -1; aj = -1;
+  $("transcript").innerHTML = '<p class="hint">Captions will appear here…</p>';
+}
+/* Uzbek lines are translated only for the lines you can see (plus a little around them) */
+const trq = []; let trBusy = false, trT = 0;
+function seen(es, o) {
+  for (const en of es) if (en.isIntersecting) {
+    const g = segs[+en.target.dataset.i]; o.unobserve(en.target);
+    if (g && !g.uz && !g.q) { g.q = true; trq.push(g); }
+  }
+  if (trq.length) { clearTimeout(trT); trT = setTimeout(flushTr, 200); }
+}
+async function flushTr() {
+  if (trBusy || !trq.length) return;
+  trBusy = true;
+  const part = trq.splice(0, 15);
+  try {
+    const r = await api("/api/translate-lines", "POST", { lines: part.map((g) => g.text) });
+    part.forEach((g, k) => { g.q = false; g.uz = (r.lines && r.lines[k]) || ""; setUz(g); });
+  } catch (e) {
+    part.forEach((g) => { g.q = false; });
+    setTimeout(() => part.forEach((g) => { const el = segEl(g.i); if (el && io && !g.uz && segs[g.i] === g) io.observe(el); }), 8000);
+  }
+  trBusy = false;
+  if (trq.length) trT = setTimeout(flushTr, 150);
+}
+function setUz(g) { const el = segEl(g.i), u = el && el.querySelector(".uz"); if (u) u.textContent = g.uz; }
+/* all words of one line are translated with ONE request, so the next taps in that line are instant */
+function prefetch(g) {
+  if (g.pf) return g.pf;
+  return (g.pf = api("/api/translate-words", "POST", { sentence: g.text })
+    .then((r) => { for (const w in r.words || {}) trc[w + "|" + g.text] = r.words[w]; })
+    .catch(() => { g.pf = null; }));
+}
+function markSaved(from) {
+  const set = new Set(cards.filter((c) => c.dir === 0).map((c) => c.front.toLowerCase())), tr = $("transcript");
+  for (let i = from || 0; i < segs.length; i++) {
+    const el = tr.children[i]; if (!el) break;
+    for (const w of el.querySelectorAll(".w")) w.classList.toggle("saved", set.has(norm(w.textContent)));
+  }
+}
+function findSeg(t) { let lo = 0, hi = segs.length - 1, r = -1; while (lo <= hi) { const m = (lo + hi) >> 1; if (segs[m].s <= t) { r = m; lo = m + 1; } else hi = m - 1; } return r; }
+function sync() {
+  const t = time(); let i = findSeg(t), j = -1;
+  if (i >= 0 && t > segs[i].e + 0.7) i = -1;
+  if (i >= 0) { const w = segs[i].w; for (let k = w.length - 1; k >= 0; k--) if (w[k].s <= t) { j = k; break; } }
+  if (i !== ai) {
+    const tr = $("transcript"), old = ai >= 0 ? segEl(ai) : null; if (old) old.classList.remove("act");
+    const el = i >= 0 ? segEl(i) : null;
+    if (el) { el.classList.add("act"); tr.scrollTo({ top: el.offsetTop - tr.clientHeight / 2 + el.clientHeight / 2 }); }
+  }
+  if (i !== ai || j !== aj) {
+    if (nowEl) { nowEl.classList.remove("now"); nowEl = null; }
+    if (i >= 0 && j >= 0) { const s = segEl(i); nowEl = s ? s.querySelector('.w[data-j="' + j + '"]') : null; if (nowEl) nowEl.classList.add("now"); }
+  }
+  ai = i; aj = j;
+}
+setInterval(() => {
+  if ($("app").hidden || $("stage").hidden) return;
+  if (segs.length) sync();
+  if (tipS && Date.now() - tipS.t0 > 900 && playing()) closeTip();
+}, 90);
+
+/* ================= player bar (the only fullscreen button is the ⛶ in the corner) ================= */
+const fmt = (s) => { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
+let seeking = false;
+const toggle = () => { if (player.paused) player.play().catch(() => {}); else player.pause(); };
+$("pp").onclick = toggle;
+player.addEventListener("click", toggle);
+player.addEventListener("play", () => ($("pp").textContent = "❚❚"));
+player.addEventListener("pause", () => ($("pp").textContent = "▶"));
+player.addEventListener("loadedmetadata", () => { $("seek").value = 0; $("tmx").textContent = "0:00 / " + fmt(player.duration); });
+player.addEventListener("timeupdate", () => {
+  if (!seeking && player.duration) $("seek").value = Math.round((player.currentTime / player.duration) * 1000);
+  $("tmx").textContent = fmt(player.currentTime) + " / " + fmt(player.duration);
+});
+$("seek").addEventListener("pointerdown", () => (seeking = true));
+addEventListener("pointerup", () => (seeking = false));
+addEventListener("pointercancel", () => (seeking = false));
+$("seek").addEventListener("input", () => { if (player.duration) player.currentTime = ($("seek").value / 1000) * player.duration; });
+
+/* ================= tooltip: translation, pronunciation, + Save ================= */
+const say = (t) => { try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = "en-US"; u.rate = 0.9; speechSynthesis.speak(u); } catch (e) {} };
+$("stage").addEventListener("click", (e) => {
+  const el = e.target.closest(".w"); if (!el) return;
+  pauseP(); openTip(el);
+});
+document.addEventListener("click", (e) => { if (tipS && !e.target.closest(".w,#tip")) closeTip(); });
+addEventListener("resize", () => placeTip());
+addEventListener("scroll", () => placeTip(), true);
+
+const savedCard = (k) => cards.find((c) => c.dir === 0 && c.front.toLowerCase() === k) || null;
+
+function openTip(el) {
+  const i = +el.dataset.i, j = +el.dataset.j, g = segs[i]; if (!g) return;
+  const w = g.w[j], k = norm(w.t); if (!k) return;
+  const saved = savedCard(k);
+  const me2 = (tipS = { el, i, j, k, g, w, saved, t0: Date.now(), tr: null });
+  const t = $("tip");
+  (($("stage").classList.contains("fs")) ? $("stage") : document.body).appendChild(t);
+  t.innerHTML = '<div class="tw">' + esc(k) + '</div><input id="tm" type="text" autocomplete="off" placeholder="Translating…" class="' + (saved || trc[k + "|" + g.text] ? "" : "ld") + '" value="' + esc(saved ? saved.back : trc[k + "|" + g.text] || "") + '">'
+    + '<div class="ta"><button class="say" id="tsp" aria-label="Pronounce">🔊</button><button class="btn' + (saved ? " done" : "") + '" id="tsv">' + (saved ? "✓ Saved" : "+ Save") + "</button>" + (saved ? '<button class="rm" id="trm" aria-label="Remove">🗑</button>' : "") + '</div><p class="te" id="te" hidden></p><i class="arrow"></i>';
+  t.classList.add("open"); placeTip();
+  $("tsp").onclick = () => say(k);
+  $("tsv").onclick = () => { if (!me2.saved) openAdd(); };
+  if (saved) $("trm").onclick = removeTip;
+  say(k);
+  if (saved) return;
+  const ck = k + "|" + g.text;
+  // Reuse the sentence-level translation first. Only call the detailed endpoint
+  // if the batch did not provide this word; this avoids duplicate Gemini calls.
+  me2.tr = trc[ck]
+    ? Promise.resolve(trc[ck])
+    : prefetch(g).then(() => {
+        if (trc[ck]) return trc[ck];
+        return api("/api/translate", "POST", { word: k, sentence: g.text }).then((r) => {
+          trc[ck] = trc[ck] || r.meaning || "";
+          return trc[ck];
+        });
+      });
+  me2.tr.then((m) => { if (tipS === me2 && $("tm")) { $("tm").classList.remove("ld"); if (!$("tm").value) $("tm").value = m; } })
+    .catch((err) => { if (tipS === me2 && $("tm")) { $("tm").classList.remove("ld"); $("tm").placeholder = "Type the meaning"; tipErr(err.message); } });
+}
+function placeTip() {
+  if (!tipS) return;
+  let el = tipS.el;
+  if (!el.isConnected) {
+    el = document.querySelector('#stage .w[data-i="' + tipS.i + '"][data-j="' + tipS.j + '"]');
+    if (!el) return closeTip(); tipS.el = el;
+  }
+  const r = el.getBoundingClientRect(), t = $("tip"), tw = t.offsetWidth, th = t.offsetHeight;
+  let left = r.left + r.width / 2 - tw / 2; left = Math.max(8, Math.min(left, innerWidth - tw - 8));
+  let top = r.top - th - 12, below = false;
+  if (top < 8) { top = r.bottom + 12; below = true; }
+  t.style.left = left + "px"; t.style.top = top + "px";
+  t.style.setProperty("--ax", Math.max(14, Math.min(tw - 14, r.left + r.width / 2 - left)) + "px");
+  t.classList.toggle("below", below);
+}
+function closeTip() { tipS = null; const t = $("tip"); t.classList.remove("open"); try { speechSynthesis.cancel(); } catch (e) {} }
+function tipErr(m) { const e = $("te"); if (e) { e.textContent = m; e.hidden = false; placeTip(); } }
+
+async function removeTip() {
+  const s = tipS; if (!s || !s.saved) return;
+  try {
+    const j = await api("/api/cards/" + s.saved.id, "DELETE");
+    cards = cards.filter((c) => c.nid !== s.saved.nid && c.id !== s.saved.id);
+    stats = j.stats; paintStats(); markSaved(); closeTip();
+  } catch (err) { tipErr(err.message); }
+}
+
+/* ================= Add screen (like Anki): Type, Deck, Front, Back ================= */
+let addCtx = null;
+const deckName = (id) => { const d = decks.find((x) => x.id === id); return d ? d.name : ""; };
+function fillDecks(sel) {
+  const s = $("addDeck");
+  s.innerHTML = decks.map((d) => '<option value="' + d.id + '">' + esc(d.name) + "</option>").join("") + '<option value="__new">＋ New deck…</option>';
+  s.value = decks.some((d) => d.id === sel) ? String(sel) : decks.length ? String(decks[0].id) : "__new";
+  deckSel();
+}
+function deckSel() { $("addDeckNew").hidden = $("addDeck").value !== "__new"; }
+$("addDeck").onchange = () => { deckSel(); if (!$("addDeckNew").hidden) $("addDeckNew").focus(); };
+function openAdd() {
+  const s = tipS; if (!s || s.saved) return;
+  const back = ($("tm") && $("tm").value.trim()) || "", ctx = (addCtx = { k: s.k, sentence: s.g.text }), pending = s.tr;
+  closeTip();
+  const m = $("addm");
+  ($("stage").classList.contains("fs") ? $("stage") : document.body).appendChild(m);
+  $("addType").value = ls.get("tbl_type") === "rev" ? "rev" : "basic";
+  fillDecks(+ls.get("tbl_deck") || 0);
+  $("addFront").value = s.k; $("addBack").value = back; $("addBack").placeholder = back ? "" : "Translating…";
+  $("addCtx").textContent = "“" + s.g.text + "”"; $("adderr").textContent = "";
+  m.hidden = false;
+  if (!back && pending) pending.then((x) => { if (addCtx === ctx && !$("addBack").value) { $("addBack").value = x; $("addBack").placeholder = ""; } })
+    .catch(() => { if (addCtx === ctx) $("addBack").placeholder = "Type the meaning"; });
+  if (!$("addDeckNew").hidden) setTimeout(() => $("addDeckNew").focus(), 80);
+}
+function closeAdd() { addCtx = null; $("addm").hidden = true; }
+$("addx").onclick = closeAdd;
+$("addm").addEventListener("mousedown", (e) => { if (e.target === $("addm")) closeAdd(); });
+$("addm").addEventListener("keydown", (e) => { e.stopPropagation(); if (e.key === "Escape") closeAdd(); });
+$("addf").onsubmit = async (e) => {
+  e.preventDefault();
+  const er = (t) => ($("adderr").textContent = t);
+  const front = $("addFront").value.trim(), back = $("addBack").value.trim(), type = $("addType").value, isNew = $("addDeck").value === "__new", newName = $("addDeckNew").value.trim();
+  er("");
+  if (!front) return er("Front is empty.");
+  if (!back) return er("Back is empty. Type the meaning or wait for the translation.");
+  if (isNew && !newName) { $("addDeckNew").focus(); return er("Give the new deck a name."); }
+  const b = $("addok"); b.disabled = true;
+  try {
+    let deckId = +$("addDeck").value;
+    if (isNew) {
+      const d = (await api("/api/decks", "POST", { name: newName })).deck;
+      decks = decks.filter((x) => x.id !== d.id).concat(d); deckId = d.id;
+    }
+    const j = await api("/api/cards", "POST", { deck_id: deckId, type, front, back, sentence: addCtx ? addCtx.sentence : "" });
+    cards = (await api("/api/cards")).cards; stats = j.stats;
+    ls.set("tbl_type", type); ls.set("tbl_deck", String(deckId));
+    paintStats(); bump(); markSaved(); closeAdd();
+    toast("Saved to “" + deckName(deckId) + "”");
+  } catch (err) { er(err.message); }
+  finally { b.disabled = false; }
+};
+
+/* ================= My words: decks -> flashcards ================= */
+let openDeck = null, filter = "all";
+const isDue = (c) => c.due <= Date.now();
+const dueText = (c) => { const d = c.due - Date.now(); if (d <= 0) return "Due now"; const h = d / 36e5; return h < 24 ? "in " + Math.max(1, Math.round(h)) + " h" : "in " + Math.round(h / 24) + " d"; };
+const STATE = { new: "New", learning: "Learning", mastered: "Mastered" };
+const enOf = (c) => (c.dir === 0 ? c.front : c.back);
+function cardHTML(c) {
+  return '<article class="fc"><button class="del" data-id="' + c.id + '" aria-label="Delete">×</button><div class="fb"><div class="fw">' + esc(c.front)
+    + '<button class="say2" data-w="' + esc(enOf(c)) + '" aria-label="Pronounce">🔊</button></div><div class="fm">' + esc(c.back)
+    + '</div><div class="fs2"><span class="bd ' + c.state + '">' + STATE[c.state] + "</span><span>" + (c.dir ? "UZ → EN · " : "EN → UZ · ") + dueText(c) + "</span></div></div></article>";
+}
+function renderWords() {
+  const root = $("wbody");
+  if (!decks.length && !cards.length) {
+    root.innerHTML = '<div class="empty"><div class="big">0</div><h2>Words saved</h2><p>Tap any word in a video caption and press “+ Save”. It will show up here as a flashcard.</p><button class="btn" id="egov">Go to Videos and save your first word</button></div>';
+    return;
+  }
+  if (openDeck && !decks.some((d) => d.id === openDeck)) openDeck = null;
+  const now = Date.now();
+  if (!openDeck) {
+    const due = cards.filter(isDue).length;
+    root.innerHTML = '<div class="whead"><h2>' + stats.words + ' Words saved</h2><button class="btn sm" id="rvs"' + (due ? "" : " disabled") + ">" + (due ? "Review " + due + " due" : "Nothing due") + "</button></div>"
+      + '<div class="dks">' + decks.map((d) => {
+        const cs = cards.filter((c) => c.deck === d.id), n = cs.filter((c) => c.dir === 0).length, dd = cs.filter(isDue).length;
+        return '<button class="dk" data-d="' + d.id + '"><span class="dn">' + esc(d.name) + '</span><span class="dm">' + n + " word" + (n === 1 ? "" : "s") + "</span>" + (dd ? '<span class="bd due">' + dd + " due</span>" : "") + "</button>";
+      }).join("") + "</div>";
+    return;
+  }
+  const d = decks.find((x) => x.id === openDeck), all = cards.filter((c) => c.deck === d.id);
+  const cnt = { all: all.length, due: 0, new: 0, learning: 0, mastered: 0 };
+  all.forEach((c) => { cnt[c.state]++; if (c.due <= now) cnt.due++; });
+  const list = all.filter((c) => filter === "all" || (filter === "due" ? c.due <= now : c.state === filter));
+  const chip = (k, l) => '<button class="chip' + (filter === k ? " on" : "") + '" data-f="' + k + '">' + l + " " + cnt[k] + "</button>";
+  $("wbody").innerHTML = '<div class="whead"><button class="back" id="dback" aria-label="Back">←</button><h2>' + esc(d.name) + '</h2><button class="btn sm" id="rvs"' + (cnt.due ? "" : " disabled") + ">" + (cnt.due ? "Study " + cnt.due + " due" : "Nothing due") + "</button></div>"
+    + '<div class="chips">' + chip("all", "All") + chip("due", "Due") + chip("new", "New") + chip("learning", "Learning") + chip("mastered", "Mastered") + "</div>"
+    + '<div class="grid">' + (list.length ? list.map(cardHTML).join("") : '<p class="sub">No cards here yet.</p>') + "</div>"
+    + '<button class="btn alt sm" id="ddel" style="margin-top:18px">Delete this deck</button>';
+}
+$("wbody").addEventListener("click", async (e) => {
+  const t = e.target;
+  if (t.closest("#egov")) return go("videos");
+  const dk = t.closest(".dk"); if (dk) { openDeck = +dk.dataset.d; filter = "all"; window.scrollTo(0, 0); return renderWords(); }
+  if (t.closest("#dback")) { openDeck = null; return renderWords(); }
+  const ch = t.closest(".chip"); if (ch) { filter = ch.dataset.f; return renderWords(); }
+  if (t.closest("#rvs")) return startReview(openDeck);
+  const sy = t.closest(".say2"); if (sy) return say(sy.dataset.w);
+  const d = t.closest(".del");
+  if (d) {
+    const id = +d.dataset.id, c = cards.find((x) => x.id === id);
+    try {
+      const j = await api("/api/cards/" + id, "DELETE");
+      cards = c && c.dir === 0 ? cards.filter((x) => x.nid !== c.nid && x.id !== c.id) : cards.filter((x) => x.id !== id);
+      stats = j.stats; paintStats(); renderWords(); markSaved();
+    } catch (err) { toast(err.message); }
+    return;
+  }
+  if (t.closest("#ddel")) {
+    if (!confirm("Delete this deck and all its cards?")) return;
+    try {
+      const j = await api("/api/decks/" + openDeck, "DELETE");
+      cards = cards.filter((c) => c.deck !== openDeck); decks = decks.filter((x) => x.id !== openDeck);
+      openDeck = null; stats = j.stats; paintStats(); renderWords(); markSaved();
+    } catch (err) { toast(err.message); }
+  }
+});
+
+/* ================= SRS review ================= */
+// Same formula as the server (grade 0 = Again, 1 = Good, 2 = Easy)
+function sched(w, g) {
+  let reps = w.reps, ease = w.ease, ivl = w.ivl;
+  if (g === 0) return { ivl: 0, label: "10 min" };
+  if (reps === 0) ivl = g === 2 ? 4 : 1;
+  else if (reps === 1) ivl = g === 2 ? 7 : 3;
+  else ivl = Math.max(ivl + 1, Math.round(ivl * ease * (g === 2 ? 1.3 : 1)));
+  return { ivl, label: ivl + " d" };
+}
+let rq = [], rtotal = 0, rdone = 0, rc = null, shown = false;
+function startReview(deckId) {
+  const now = Date.now();
+  rq = cards.filter((c) => c.due <= now && (!deckId || c.deck === deckId)).sort((a, b) => a.due - b.due);
+  if (!rq.length) return toast("Nothing to review right now.");
+  rtotal = rq.length; rdone = 0; $("rvm").hidden = false; nextCard();
+}
+function nextCard() { if (!rq.length) return finishReview(); rc = rq[0]; shown = false; drawReview(); }
+function drawReview() {
+  const w = rc, r = $("rv"), sp = '<button class="say2" id="rvsay" aria-label="Pronounce">🔊</button>';
+  r.innerHTML = '<button class="cx" id="rvx" aria-label="Close">×</button><div class="top"><span>' + esc(deckName(w.deck)) + "</span><span>" + Math.min(rdone + 1, rtotal) + " / " + rtotal + "</span></div>"
+    + '<div class="rw">' + esc(w.front) + (w.dir === 0 ? sp : "") + "</div>"
+    + (shown
+      ? '<hr class="sep"><p class="rm">' + esc(w.back) + (w.dir === 1 ? sp : "") + "</p>" + (w.sentence ? '<p class="rs">“' + esc(w.sentence) + "”</p>" : "")
+        + '<div class="gr"><button class="g0" data-g="0">Again<small>' + sched(w, 0).label + '</small></button><button data-g="1">Good<small>' + sched(w, 1).label + '</small></button><button class="g2" data-g="2">Easy<small>' + sched(w, 2).label + "</small></button></div>"
+      : '<button class="btn" id="rvshow">Show answer</button>');
+}
+function finishReview() {
+  $("rv").innerHTML = '<button class="cx" id="rvx" aria-label="Close">×</button><div class="fin"><div class="big">🎉</div><h2>Session complete</h2><p class="sub">Great work. Come back when more cards are due.</p><button class="btn" id="rvx2">Done</button></div>';
+}
+function closeReview() { $("rvm").hidden = true; renderWords(); }
+$("rv").addEventListener("click", async (e) => {
+  const t = e.target;
+  if (t.closest("#rvx") || t.closest("#rvx2")) return closeReview();
+  if (t.closest("#rvsay")) return say(enOf(rc));
+  if (t.closest("#rvshow")) { shown = true; return drawReview(); }
+  const g = t.closest("[data-g]");
+  if (g && rc) {
+    const grade = +g.dataset.g, cardNow = rc; g.disabled = true;
+    try {
+      const j = await api("/api/cards/" + cardNow.id + "/review", "POST", { grade });
+      const k = cards.findIndex((x) => x.id === cardNow.id); if (k >= 0) cards[k] = Object.assign(cards[k], j.card);
+      rq.shift(); if (grade === 0 && k >= 0) rq.push(cards[k]); else rdone++;
+      nextCard();
+    } catch (err) { g.disabled = false; toast(err.message); }
+  }
+});
+$("rvm").addEventListener("mousedown", (e) => { if (e.target === $("rvm")) closeReview(); });
+
+/* ================= swipe left / right between Videos, My words and Profile (like Telegram) ================= */
+const TABS = ["videos", "words", "profile"];
+const curTab = () => { const v = document.querySelector(".view.cur"); return v ? v.id.slice(2) : "videos"; };
+function nav(v) {
+  const from = TABS.indexOf(curTab()), to = TABS.indexOf(v);
+  go(v);
+  if (from === to) return;
+  const el = $("v-" + v); el.classList.remove("sl", "sr"); void el.offsetWidth; el.classList.add(to > from ? "sl" : "sr");
+}
+document.querySelectorAll("#nav button").forEach((b) => (b.onclick = () => nav(b.dataset.v)));
+$("pill").onclick = () => nav("words");
+let sw = null;
+document.addEventListener("touchstart", (e) => {
+  const p = e.touches[0];
+  if ($("app").hidden || e.touches.length !== 1 || e.target.closest("input,select,textarea,#bar,#tip,#stage.fs") || document.querySelector(".modal:not([hidden])") || p.clientX < 24 || p.clientX > innerWidth - 24) { sw = null; return; }
+  sw = { x: p.clientX, y: p.clientY, t: Date.now() };
+}, { passive: true });
+document.addEventListener("touchend", (e) => {
+  if (!sw) return;
+  const p = e.changedTouches[0], dx = p.clientX - sw.x, dy = p.clientY - sw.y, s0 = sw; sw = null;
+  if (Math.abs(dx) < 70 || Math.abs(dx) < Math.abs(dy) * 1.8 || Date.now() - s0.t > 700) return;
+  const n = TABS.indexOf(curTab()) + (dx < 0 ? 1 : -1);
+  if (n >= 0 && n < TABS.length) nav(TABS[n]);
+}, { passive: true });
+document.addEventListener("touchcancel", () => { sw = null; }, { passive: true });
+
+/* ================= boot ================= */
+(async function boot() {
+  setMode("login");
+  if (!token) return;
+  try { const m = await api("/api/me"); await enter(m.user); }
+  catch (e) { if (e.status === 401) signedOut(); else { toast(e.message); } }
+})();
+})();
+</script>
+</body>
+</html>
