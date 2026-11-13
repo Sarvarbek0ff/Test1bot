@@ -211,10 +211,11 @@ async function cachePut(env, pairs) {
 
 /* ---------- AI helpers ---------- */
 // Every model has its own free quota. If one is used up (429) the next one is tried, so a tap rarely fails.
-const GEM_MODELS = ["gemini-flash-lite-latest", "gemini-flash-latest", "gemini-2.5-flash-lite", "gemini-2.5-flash"];
+const GEM_MODELS = ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-2.5-flash-lite", "gemini-flash-lite-latest", "gemini-flash-latest"];
 const cool = {}; // model -> time until which it is skipped after a 429
-// "Thinking" makes Gemini slow and word translation does not need it. Models differ in how it is switched off.
-const GEM_THINK = [{ thinkingBudget: 0 }, { thinkingLevel: "minimal" }, null];
+// Newer Gemini models reject thinkingBudget:0 and thinkingLevel:"minimal" with a generic
+// "Request contains an invalid argument." Word translation does not need thinking.
+const GEM_THINK = [null, { thinkingLevel: "low" }, { thinkingBudget: 0 }];
 let gemOk = null; // the model + switch that worked last time in this isolate
 
 async function gemCall(env, model, think, system, user, max, ms) {
@@ -281,7 +282,7 @@ async function gemini(env, system, user, max = 1000, ms = 9000) {
         err = e;
         if (e.gem === 404) break;                                   // unknown model name: try the next model
         if (e.gem === 429) { cool[m] = Date.now() + 60000; break; } // this model's quota is used up: next model
-        if (e.gem === 400 && t && /think/i.test(e.message)) continue; // this model wants another thinking switch
+        if (e.gem === 400) continue;                                // this thinking switch was rejected: try the next
         throw e;                                                    // timeout, bad key ...: report it
       }
     }
