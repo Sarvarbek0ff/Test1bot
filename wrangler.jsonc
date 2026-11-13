@@ -1,0 +1,13 @@
+{
+  "name": "thebestlearning",
+  "main": "worker.js",
+  "compatibility_date": "2025-06-01",
+  "ai": { "binding": "AI" },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "thebestlearning",
+      "database_id": "6cd4a2c4-cda7-409b-bc77-13a478f6e4d6"
+    }
+  ]
+}
